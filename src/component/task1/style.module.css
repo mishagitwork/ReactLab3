@@ -1,0 +1,16 @@
+.main {
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.buttonMain {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 300px;
+}
+
+.headerButton {
+  margin: 5px;
+}
