@@ -3,6 +3,7 @@ import { Button, Row, Col } from "antd";
 import style from "./style.module.css";
 import Task1 from "../task1/Task1";
 import Task2 from "../task2/Task2";
+import Task3 from "../task3/Task3";
 
 class Main extends React.Component {
   constructor(props) {
@@ -53,7 +54,7 @@ class Main extends React.Component {
 
         {this.state.task === "first" && <Task1 />}
         {this.state.task === "second" && <Task2 />}
-        {this.state.task === "third" && console.log(this.state.task)}
+        {this.state.task === "third" && <Task3 />}
       </div>
     );
   }

@@ -38,39 +38,6 @@ export default class Task2 extends React.Component {
       items: generateItems(),
     };
   }
-  componentWillMount() {
-    document.addEventListener("keydown", this.onKeyPressed.bind(this));
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.onKeyPressed.bind(this));
-  }
-  onKeyPressed(e) {
-    const items = this.state.items.map((item) => {
-      if (item.isDragging === true) {
-        switch (e.key) {
-          case "ArrowLeft":
-            item.x = item.x > 10 ? (item.x -= 10) : item.x;
-            return item;
-          case "ArrowUp":
-            item.y = item.y > 10 ? (item.y -= 10) : item.y;
-            return item;
-          case "ArrowRight":
-            item.x =
-              item.x + item.width < sizePlace - 10 ? (item.x += 10) : item.x;
-            return item;
-          case "ArrowDown":
-            item.y =
-              item.y + item.height < sizePlace - 10 ? (item.y += 10) : item.y;
-            return item;
-          default:
-            return item;
-        }
-      } else return item;
-    });
-    console.log(items);
-    this.setState({ items });
-  }
   addRect = () => {
     var width = (Math.random() * sizePlace) / 5 + 25;
     var height = (Math.random() * sizePlace) / 5 + 25;
@@ -95,17 +62,31 @@ export default class Task2 extends React.Component {
     console.log(items[items.length - 1]);
     this.setState({ items });
   };
-  onClick = (e) => {
+
+  handleDragStart = (e) => {
     const id = e.target.name();
     const items = this.state.items.slice();
     const item = items.find((i) => i.id === id);
     const index = items.indexOf(item);
     items.splice(index, 1);
-    item.isDragging = !item.isDragging;
+    item.isDragging = true;
     items.push(item);
     this.setState({
       items,
     });
+  };
+  onDragEnd = (e) => {
+    const id = e.target.name();
+    const items = this.state.items.slice();
+    const item = this.state.items.find((i) => i.id === id);
+    const index = this.state.items.indexOf(item);
+    items[index] = {
+      ...item,
+      isDragging: false,
+      x: e.target.x(),
+      y: e.target.y(),
+    };
+    this.setState({ items });
   };
   render() {
     return (
@@ -118,14 +99,15 @@ export default class Task2 extends React.Component {
                   <Rect
                     key={item.id}
                     name={item.id}
+                    draggable
                     x={item.x}
                     y={item.y}
                     width={item.width}
                     height={item.height}
                     fill={item.color}
                     shadowBlur={item.isDragging ? 10 : 0}
-                    onClick={this.onClick}
-                    onKeyDown={this.onKeyPressed}
+                    onDragStart={this.handleDragStart}
+                    onDragEnd={this.onDragEnd}
                   />
                 ))}
               </Layer>
